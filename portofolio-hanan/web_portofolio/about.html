@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap");
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url("./img/background.jpg");
+            background-size: cover;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        nav {
+            width: 100%;
+            height: 10vh;
+            position: sticky;
+            position: relative;
+            z-index: 1000;
+        }
+        .nav-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .logo span {
+            color: rgb(58, 211, 3);
+            text-shadow: 0 0 10px rgb(58, 211, 3);
+        }
+
+        .hamburg,
+        .cancel {
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            color: white;
+            display: none;
+            font-size: clamp(2.5rem, 0.5rem + 5vw, 3rem);
+        }
+
+        .nav-container .links {
+            display: flex;
+        }
+        .nav-container .links a {
+            font-size: 1.2rem;
+            color: white;
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: 550;
+            transition: 0.3s linear;
+        }
+        .nav-container .links a:hover {
+            color: rgb(58, 211, 3);
+            border-bottom: 2px solid rgb(58, 211, 3);
+        }
+        .nav-container .links .active {
+            color: rgb(58, 211, 3);
+            border-bottom: 2px solid rgb(58, 211, 3);
+        }
+
+        .dropdown {
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            transform: translateY(-500px);
+            width: 100%;
+            height: auto;
+            backdrop-filter: blur(4px) brightness(40%);
+            box-shadow: 0 0 20px black;
+            transition: 0.2s linear;
+        }
+
+        .dropdown .links a {
+            display: flex;
+            color: white;
+            text-decoration: none;
+            padding: 15px 0;
+            justify-content: center;
+            align-items: center;
+            transition: 0.2s linear;
+        }
+
+        .dropdown .links a:hover {
+            background-color: rgb(58, 211, 3);
+        }
+
+        .about-container {
+            width: 100%;
+            min-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .about-content {
+            width: 80%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            color: white;
+        }
+        .about-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .about-header h1 {
+            font-size: 2.5rem;
+            color: rgb(58, 211, 3);
+            text-shadow: 0 0 10px rgb(58, 211, 3);
+            margin-bottom: 1rem;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .about-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 30px #d2691e;
+        }
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .about-text h2 {
+            color: rgb(58, 211, 3);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(58, 211, 3, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgb(58, 211, 3);
+            cursor: pointer;
+        }
+
+        .stat-item h3 {
+            color: rgb(58, 211, 3);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .content-card {
+            background: rgba(58, 211, 3, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(58, 211, 3, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 1rem;
+        }
+
+        .card-info h3 {
+            color: rgb(58, 211, 3);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-info .technologies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .technology-tag {
+            background: rgba(58, 211, 3, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: rgb(58, 211, 3);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: rgb(58, 211, 3);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgb(45, 165, 2);
+            transform: translateY(-2px);
+        }
+
+        .award-icon {
+            font-size: 2rem;
+            color: rgb(58, 211, 3);
+            margin-bottom: 1rem;
+        }
+
+        .client-testimonial {
+            font-style: italic;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(58, 211, 3, 0.05);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 884px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav .logo {
+                position: absolute;
+                top: 16px;
+                left: 15px;
+                font-size: 1.5rem;
+            }
+
+            .nav-container .links {
+                display: none;
+            }
+
+            .hamburg,
+            .cancel {
+                display: block;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .about-container {
+                padding: 1rem;
+            }
+
+            .about-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .about-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .about-text h2 {
+                font-size: 1.4rem;
+            }
+
+            .about-text p {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            .about-image {
+                width: 100%;
+                max-height: 250px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .stat-item {
+                padding: 0.8rem;
+            }
+            .stat-item h3 {
+                font-size: 1.2rem;
+            }
+            .stat-item p {
+                font-size: 0.8rem;
+            }
+            .stat-item a {
+                padding: 0.5rem;
+                display: block;
+            }
+        }
+    </style>
+    <title>About - Portfolio Website</title>
+</head>
+
+<body>
+
+    <!-- Navigasi -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" data-aos="zoom-in" data-aos-duration="1500">
+                Hanan Aria <span>SantagamaX</span>
+            </div>
+            <div class="links">
+                <div class="link" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100"><a
+                        href="index.html">Beranda</a></div>
+                <div class="link active" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200"><a
+                        href="about.html">Tentang Saya</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300"><a
+                        href="skill.html">Keahlian</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="500"><a
+                        href="contact.html">Kontak</a></div>
+            </div>
+        </div>
+        <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+        <div class="dropdown">
+            <div class="links">
+                <a href="index.html">Beranda</a>
+                <a href="about.html">Tentang Saya</a>
+                <a href="skill.html">Keahlian</a>
+                <a href="contact.html">Kontak</a>
+                <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Konten utama halaman About -->
+    <div class="about-container">
+        <div class="about-content" id="aboutContent">
+            <!-- Bagian header -->
+            <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                <h1>About Me 😎✌️</h1>
+            </div>
+
+            <!-- Grid untuk gambar dan teks deskripsi -->
+            <div class="about-grid">
+                <div class="about-image" data-aos="fade-right" data-aos-duration="1500">
+                    <img src="img/hanan.jpg" alt="About Image">
+                </div>
+                <div class="about-text" data-aos="fade-left" data-aos-duration="1500">
+                    <h2>Who Am I?</h2>
+                    <p>I am Hanan Aria Santagama, saya lahir di Kota Tangerang, 6 Agustus 2008, dan saat ini tinggal di Kab. Majalengka, Kec. Rajagaluh.
+                        Sebagai siswa SMKN 1 Majalengka, saya mengambil jurusan Pengembangan Perangkat Lunak dan Gim (PPLG) - Kelas 10 untuk mendalami dunia teknologi.
+                    <p>Saya memiliki ketertarikan dalam dunia pemrograman, terutama dalam pengembangan web, desain UI/UX, pengembangan aplikasi dan game.
+                        Saya terus mengasah keterampilan saya untuk menciptakan solusi inovatif yang dapat memberikan manfaat bagi banyak orang.</p>
+
+                    <div class="stats">
+                        <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="200"
+                            onclick="showProjects()">
+                            <h3>4+</h3>
+                            <p>Proyek Selesai ☑️</p>
+                        </div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="400"
+                            onclick="showExperience()">
+                            <h3>13 th+</h3>
+                            <p>Pendidikan 🎓</p>
+                        </div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="600"
+                            onclick="showClients()">
+                            <h3>10+</h3>
+                            <p>Galeri Singkat 📸</p>
+                        </div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="800"
+                            onclick="showAwards()">
+                            <h3>6+</h3>
+                            <p>My Hobby 😎✌️</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link ke library animasi AOS -->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+        <!-- JavaScript untuk interaksi dan animasi halaman -->
+        <script>
+
+            // Inisialisasi library AOS
+            AOS.init({ offset: 0 });
+
+            // Fungsi untuk menampilkan menu hamburger
+            function hamburg() {
+                const navbar = document.querySelector(".dropdown")
+                navbar.style.transform = "translateY(0px)"
+            }
+
+            // Fungsi untuk menyembunyikan menu hamburger
+            function cancel() {
+                const navbar = document.querySelector(".dropdown")
+                navbar.style.transform = "translateY(-500px)"
+            }
+
+            // Fungsi untuk menampilkan daftar Project
+            function showProjects() {
+                const aboutContent = document.getElementById('aboutContent');
+                aboutContent.innerHTML = `
+                <a href="about.html" class="back-button" onclick="restoreInitialContent()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                    <h1>My Projects ☑️</h1>
+                </div>
+                <div class="content-grid">
+                    ${generateProjectCards()}
+                </div>
+            `;
+                AOS.refresh();
+            }
+
+            function showExperience() {
+                const aboutContent = document.getElementById('aboutContent');
+                aboutContent.innerHTML = `
+                <a href="about.html" class="back-button" onclick="restoreInitialContent()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                    <h1>Pendidikan 🎓</h1>
+                </div>
+                <div class="content-grid">
+                    ${generateExperienceCards()}
+                </div>
+            `;
+                AOS.refresh();
+            }
+
+            function showClients() {
+                const aboutContent = document.getElementById('aboutContent');
+                aboutContent.innerHTML = `
+                <a href="about.html" class="back-button" onclick="restoreInitialContent()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                    <h1>Galeri Singkat 📸</h1>
+                </div>
+                <div class="content-grid">
+                    ${generateClientCards()}
+                </div>
+            `;
+                AOS.refresh();
+            }
+
+            function showAwards() {
+                const aboutContent = document.getElementById('aboutContent');
+                aboutContent.innerHTML = `
+                <a href="about.html" class="back-button" onclick="restoreInitialContent()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                    <h1>My Hobby 😎✌️</h1>
+                </div>
+                <div class="content-grid">
+                    ${generateAwardCards()}
+                </div>
+            `;
+                AOS.refresh();
+            }
+
+            // Fungsi pembantu untuk menghasilkan kartu
+            function generateProjectCards() {
+                const projects = [
+                    {
+                        title: "Portfolio Website",
+                        image: "img/portofolio.png",
+                        description: "Website portofolio yang responsif untuk menampilkan informasi pribadi, karya, galeri, kontak, dll. Dengan desain modern dan animasi menarik.",
+                        technologies: ["HTML", "CSS", "JavaScript", "PHP"]
+                    },
+                    {
+                        title: "Website Top-Up Game",
+                        image: "img/topup_game.png",
+                        description: "Website top-up game dengan sistem pembayaran yang sudah trintegrasi, memudahkan pengguna dalam bertransaksi dengan cepat dan aman.",
+                        technologies: ["HTML", "Bootstrap Framework"]
+                    },
+                    {
+                        title: "Flowchart Menghitung Gaji Karyawan",
+                        image: "img/flowgorithm.png",
+                        description: "Aplikasi yang membantu dalam proses perhitungan gaji karyawan menggunakan flowchart dan pseudocode untuk memudahkan pemahaman logika sistem.",
+                        technologies: ["Flowgorithm", "Pseudocode"]
+                    },
+                    {
+                        title: "Website Pencegahan Stunting",
+                        image: "img/stunting.png",
+                        description: "Website informatif yang sederhana dibuat untuk membantu memberikan informasi kepada masyarakat agar lebih sadar akan pentingnya gizi bagi anak-anak serta mencegah stunting.",
+                        technologies: ["PHP", "CSS"]
+                    }
+                ];
+
+                return projects.map(project => `
+                <div class="content-card" data-aos="fade-up">
+                    <div class="card-image">
+                        <img src="${project.image}" alt="${project.title}">
+                    </div>
+                    <div class="card-info">
+                        <h3>${project.title}</h3>
+                        <p>${project.description}</p>
+                        <div class="technologies">
+                            ${project.technologies.map(tech => `
+                                <span class="technology-tag">${tech}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            }
+
+            // Fungsi pembantu untuk menghasilkan kartu
+            function generateExperienceCards() {
+                const experiences = [
+                    {
+                        title: "PAUD | Kenanga Tangerang",
+                        company: "Pendidikan Anak Usia Dini",
+                        period: "2012 - 2013",
+                        description: "Belajar dasar komunikasi dan interaksi sosial"
+                    },
+                    {
+                        title: "TK | R.A Saida Usmany Tangerang",
+                        company: "Taman Kanak-Kanak",
+                        period: "2013 - 2015",
+                        description: "Mengembangkan keterampilan membaca, menulis, dan berhitung"
+                    },
+                    {
+                        title: "SD Negeri 1 Rajagaluh",
+                        company: "Sekolah Dasar",
+                        period: "2015 - 2021",
+                        description: "Mempelajari dasar ilmu pengetahuan dan keterampilan akademik"
+                    },
+                    {
+                        title: "SMP Negeri 1 Rajagaluh",
+                        company: "Sekolah Menengah Pertama",
+                        period: "2021 - 2024",
+                        description: "Mulai tertarik dengan dunia teknologi dan eksplorasi dunia digital"
+                    },
+                    {
+                        title: "SMK Negeri 1 Majalengka",
+                        company: "Sekolah Menengah Kejuruan",
+                        period: "2025 - Sekarang",
+                        description: "Mendalami pemrograman dan teknologi dalam kelas industri"
+                    },
+                ];
+
+                return experiences.map(exp => `
+                <div class="content-card" data-aos="fade-up">
+                    <div class="card-info">
+                        <h3>${exp.title}</h3>
+                        <h4>${exp.company}</h4>
+                        <p class="period">${exp.period}</p>
+                        <p>${exp.description}</p>
+                    </div>
+                </div>
+            `).join('');
+            }
+
+            // Galeri
+            function generateClientCards() {
+                const clients = [
+                    {
+                        image: "img/hananbayi1.jpg",
+                    },
+                    {
+                        image: "img/hananbayi2.jpg",
+                    },
+                    {
+                        image: "img/hanankecil2.jpg",
+                    },
+                    {
+                        image: "img/hanankecil1.jpg",
+                    },
+                    {
+                        image: "img/hanantk1.jpg",
+                    },
+                    {                      
+                        image: "img/hanantk2.jpg",
+                    },
+                    {                       
+                        image: "img/hanantk3.jpg",                        
+                    },
+                    {                    
+                        image: "img/hanansd.jpg",                       
+                    },
+                    {
+                        image: "img/hanansmp2.jpg",
+                    },
+                    {
+                        image: "img/hanan.jpg",
+                    },
+                ];
+
+                return clients.map(client => `
+    <div class="" data-aos="fade-up">
+        <div class="">
+            <img src="${client.image}" alt="${client.name}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    </div>
+    `).join('');
+}
+
+            // Fungsi pembantu untuk menghasilkan kartu
+function generateAwardCards() {
+    const awards = [
+        {
+            title: "Ngoding",
+            description: "Aku suka ngoding karena menantang kreatifitas serta logikaku. Karena menurutku 'Setiap baris kode adalah sebuah puisi indah yang ditulis dengan Logika'.",
+            icon: "fas fa-laptop-code"
+        },
+        {
+            title: "Bermain Game",
+            description: "Bermain game adalah cara terbaikku untuk menghilangkan stres dan menikmati waktu luang dengan tantangan serta keseruan yang ada.",
+            icon: "fas fa-gamepad"
+        },
+        {
+            title: "Riding / Berkendara",
+            description: "Aku suka berkendara karena bisa menikmati perjalanan, merasakan angin segar, serta eksplorasi tempat tempat baru yang menarik.",
+            icon: "fas fa-motorcycle"
+        },
+        {
+            title: "Berenang",
+            description: "Aku suka Berenang karena membuatku lebih segar dan rileks. Air selalu memberikan efek ketenangan, dan melepas kepenatan.",
+            icon: "fas fa-swimmer"
+        },
+        {
+            title: "Jogging",
+            description: "Jogging membuatku lebih segar dan bersemangat. setiap langkah terasa seperti pelepasan energi negatif, digantikan dengan kebahagiaan dan semangat baru.",
+            icon: "fas fa-running"
+        },
+        {
+            title: "Mendengarkan Musik",
+            description: "Musik adalah bagian dari hidupku. Mendengarkan lagu-lagu favorit dapat meningkatkan mood dan memberikan inspirasi dalam setiap aktivitas terutama saat ngoding.",
+            icon: "fas fa-music"
+        }
+    ];
+
+    return awards.map(award => `
+    <div class="content-card" data-aos="fade-up">
+        <div class="card-info">
+            <div class="award-icon">
+                <i class="${award.icon}"></i>
+            </div>
+            <h3>${award.title}</h3>
+            <p>${award.description}</p>
+        </div>
+    </div>
+    `).join('');
+}
+
+            // Fungsi untuk mengembalikan konten awal
+            function restoreInitialContent() {
+                const aboutContent = document.getElementById('aboutContent');
+                aboutContent.innerHTML = `
+                <div class="about-header" data-aos="fade-down" data-aos-duration="1500">
+                    <h1>About Me</h1>
+                </div>
+                <div class="about-grid">
+                    <div class="about-image" data-aos="fade-right" data-aos-duration="1500">
+                        <img src="img/hanan.jpg" alt="About Image">
+                    </div>
+                    <div class="about-text" data-aos="fade-left" data-aos-duration="1500">
+                        <h2>Who Am I?</h2>
+                        <p>I am Hanan Aria Santagama, saya lahir di Kota Tangerang, 6 Agustus 2008, dan saat ini tinggal di Kab. Majalengka, Kec. Rajagaluh.
+                            Sebagai siswa SMKN 1 Majalengka, saya mengambil jurusan Pengembangan Perangkat Lunak dan Gim (PPLG) - Kelas 10 untuk mendalami dunia teknologi.
+                        <p>Saya memiliki ketertarikan dalam dunia pemrograman, terutama dalam pengembangan web, desain UI/UX, pengembangan aplikasi dan game.
+                            Saya terus mengasah keterampilan saya untuk menciptakan solusi inovatif yang dapat memberikan manfaat bagi banyak orang.</p>
+
+                        <div class="stats">
+                            <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="200"
+                                onclick="showProjects()">
+                                <h3>4+</h3>
+                                <p>Proyek Selesai</p>
+                            </div>
+                            <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="400"
+                                onclick="showExperience()">
+                                <h3>13 th+</h3>
+                                <p>Pendidikan</p>
+                            </div>
+                            <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="600"
+                                onclick="showClients()">
+                                <h3>20+</h3>
+                                <p>Gallery</p>
+                            </div>
+                            <div class="stat-item" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="800"
+                                onclick="showAwards()">
+                                <h3>15+</h3>
+                                <p>Hobby</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+                AOS.refresh();
+            }
+
+        </script>
+</body>
+
+</html>
